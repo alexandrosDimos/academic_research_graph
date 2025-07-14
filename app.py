@@ -43,7 +43,7 @@ document_ids = vector_store.add_documents(documents=all_splits)
 
 custom_prompt = PromptTemplate.from_template(
     """You are an assistant for question-answering tasks and your expertise is academic research. Use the following pieces of retrieved context to answer the question. If you don't know the answer, 
-    just say that you don't know. If any feedback is provided take it under consideration.
+    just say that you don't know. If any feedback is provided take it under consideration and reply based on how the feedback applies to the question. You answer mainly to the question when context and feedback are None.
     Question: {question} 
     Context: {context}
     Feedback: {feedback} 
@@ -53,8 +53,8 @@ custom_prompt = PromptTemplate.from_template(
 
 
 #prompt = hub.pull('rlm/rag-prompt')
-#llm = ChatOllama(model="llama3.2", temperature=0.5)
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
+llm = ChatOllama(model="llama3.2", temperature=0.5)
+#llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
 class State(TypedDict):
     question: str
     context: List[Document]
@@ -66,9 +66,9 @@ def retrieve(state: State):
     print("--Retrieving Information--")
     question = state['question']
     retrieved_docs = vector_store.similarity_search_with_score(query=question,k=4)
-    for i, (doc, score) in enumerate(retrieved_docs):
-        print(f"\nDocument {i+1} (score: {score:.4f}):")
-        print(doc.page_content[:500])
+    #for i, (doc, score) in enumerate(retrieved_docs):
+    #    print(f"\nDocument {i+1} (score: {score:.4f}):")
+    #    print(doc.page_content[:500])
     #state['feedback'] = None
     docs_only = [doc for doc, score in retrieved_docs]
     return {'context': docs_only, 'feedback': None}
@@ -100,6 +100,7 @@ def feedback_loop(state: State):
 
 def feedback_check(state: State):
     if state['feedback'] != 'approved':
+        state['feedback'] = None
         return "generate"
     
     if state['feedback'] == 'approved':
