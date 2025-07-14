@@ -34,4 +34,8 @@
     ```bash
     git fetch origin
     git checkout feature/<your name>
+
+11. Pull from your branch. This will probably discard any local changes you made so if you want to store them be sure to do so. I think you can use `git shash`, but do your own research on that:
+    ```bash
+    git pull
     
