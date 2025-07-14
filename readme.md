@@ -21,3 +21,17 @@
 6. Install the requirements
     ```bash
     pip install -r .\requirements.txt
+
+7. Use Ollama. Download ollama to your computer from [Ollama](https://ollama.com/)
+
+8. Download any model you want I would recommend llama3.2 or gemma3:4b, since they are both light models
+    ```bash
+    ollama pull <model-name>
+
+9. Uncomment `llm = ChatOllama(model="llama3.2", temperature=0.5)` and comment `llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)`
+
+10. Switch to your branch. I have created 2 new branches on Github one for each, one named `vasilis` and one `konstantina` Run the following commands:
+    ```bash
+    git fetch origin
+    git checkout feature/<your name>
+    
